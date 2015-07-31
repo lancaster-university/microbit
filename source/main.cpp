@@ -16,21 +16,11 @@
 
 #include "MicroBit.h"
 
-DigitalOut led1(LED1);
-
-void periodicCallback(void)
-{
-     /* Do blinky on LED1 while we're waiting for BLE events */
-}
-
 void app_main()
 {
-    led1 = 1;
-	
-    // infinite loop
-    while (1)
-	{
-		uBit.display.scrollString("ABC123");
-		uBit.sleep(1000);
-	}
+  while (1)
+  {
+	  uBit.display.scrollString("HELLO! :)");
+	  uBit.sleep(1000);
+  }
 }
