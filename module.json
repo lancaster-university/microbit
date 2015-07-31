@@ -1,0 +1,20 @@
+{
+  "name": "microbit",
+  "version": "0.0.1",
+  "description": "The micro:bit runtime, building with yotta",
+  "licenses": [
+    {
+      "url": "https://spdx.org/licenses/Apache-2.0",
+      "type": "Apache-2.0"
+    }
+  ],
+  "dependencies": {
+      "mbed-classic": "~0.0.4",
+      "ble": "jamesadevine/BLE_API",
+      "ble-nrf51822": "jamesadevine/nrf51822",
+	    "microbit-dal":"jamesadevine/microbit-dal"
+  },
+  "targetDependencies": {},
+  "bin": "./source"
+}
+

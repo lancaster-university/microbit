@@ -1,0 +1,46 @@
+{
+  "name": "bbc-microbit-armcc",
+  "version": "0.0.1",
+  "description": "Official mbed build target for the microbit, using the armcc toolchain.",
+  "licenses": [
+    {
+      "url": "https://spdx.org/licenses/Apache-2.0",
+      "type": "Apache-2.0"
+    }
+  ],
+  "inherits": {
+    "mbed-armcc": "*"
+  },
+  "keywords": [
+    "mbed-target:nrf51822",
+    "mbed-official",
+    "nrf51822",
+    "nordic",
+    "armcc",
+	"microbit"
+  ],
+  "config": {},
+  "similarTo": [
+    "nrf51822",
+    "nrf",
+    "nordic",
+    "cortex-m0",
+    "armv6-m",
+    "mbed-classic"
+  ],
+  "toolchain": "CMake/toolchain.cmake",
+  "scripts": {
+    "debug": [
+      "valinor",
+      "--target",
+      "NRF51_MICROBIT",
+      "$program"
+    ],
+    "test": [
+      "mbed_test_wrapper",
+      "--target",
+      "NRF51_MICROBIT",
+      "$program"
+    ]
+  }
+}

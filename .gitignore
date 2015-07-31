@@ -1,0 +1,7 @@
+build
+yotta_modules
+yotta_targets/*
+
+!.gitignore
+
+!yotta_targets/bbc-microbit-armcc
