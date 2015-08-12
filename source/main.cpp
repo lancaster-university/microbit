@@ -20,7 +20,7 @@ void app_main()
 {
   while (1)
   {
-	  uBit.display.scrollString("HELLO! :)");
+	  uBit.display.scroll("BELLO! :)");
 	  uBit.sleep(1000);
   }
 }
