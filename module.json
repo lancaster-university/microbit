@@ -1,6 +1,6 @@
 {
   "name": "microbit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The micro:bit runtime, building with yotta",
   "licenses": [
     {
@@ -9,10 +9,9 @@
     }
   ],
   "dependencies": {
-      "mbed-classic": "~0.0.4",
-      "microbit-dal":"lancaster-university/microbit-dal"
+    "mbed-classic": "~0.0.4",
+    "microbit-dal": "lancaster-university/microbit-dal"
   },
   "targetDependencies": {},
   "bin": "./source"
 }
-
