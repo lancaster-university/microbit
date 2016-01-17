@@ -10,10 +10,7 @@
   ],
   "dependencies": {
       "mbed-classic": "~0.0.4",
-      "ble": "lancaster-university/BLE_API",
-      "ble-nrf51822": "lancaster-university/nrf51822",
-      "microbit-dal":"lancaster-university/microbit-dal",
-	  "nrf51-sdk":"lancaster-university/nrf51-sdk"
+      "microbit-dal":"lancaster-university/microbit-dal"
   },
   "targetDependencies": {},
   "bin": "./source"
