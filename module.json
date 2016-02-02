@@ -9,7 +9,6 @@
     }
   ],
   "dependencies": {
-    "mbed-classic": "~0.0.4",
     "microbit-dal": "lancaster-university/microbit-dal"
   },
   "targetDependencies": {},
