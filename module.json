@@ -9,8 +9,11 @@
     }
   ],
   "dependencies": {
-    "microbit-dal": "lancaster-university/microbit-dal"
+    "microbit-dal": "lancaster-university/microbit-dal#component-refactor"
   },
+  "extraIncludes": [
+    "inc"
+  ],
   "targetDependencies": {},
   "bin": "./source"
 }
