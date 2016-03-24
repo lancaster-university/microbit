@@ -97,7 +97,7 @@ void MicroBit::init()
 #endif
 
     // Bring up fiber scheduler.
-    scheduler_init(&messageBus);
+    scheduler_init(messageBus);
 
     // Seed our random number generator
     seedRandom();
