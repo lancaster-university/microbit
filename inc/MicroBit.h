@@ -18,7 +18,7 @@
 #include "MicroBitEvent.h"
 #include "DynamicPwm.h"
 #include "MicroBitI2C.h"
-#include "MESEvents.h"
+#include "NotifyEvents.h"
 
 #include "MicroBitButton.h"
 #include "MicroBitPin.h"
