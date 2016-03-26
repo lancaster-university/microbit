@@ -58,6 +58,9 @@ class MicroBit
 
     public:
 
+    // Serial Interface
+    MicroBitSerial              serial;
+
 	// Reset Button
 	InterruptIn     		    resetButton;
 
@@ -66,9 +69,6 @@ class MicroBit
 
     // I2C Interface
     MicroBitI2C                 i2c;
-
-    // Serial Interface
-    MicroBitSerial              serial;
 
     // Device level Message Bus abstraction
     MicroBitMessageBus          messageBus;

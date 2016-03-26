@@ -22,6 +22,10 @@
 #pragma GCC diagnostic pop
 #endif
 
+#if CONFIG_ENABLED(MICROBIT_DBG)
+// We create and initialize to NULL here, but MicroBitSerial will automatically update this as needed in its constructor.
+RawSerial* SERIAL_DEBUG = NULL;
+#endif
 
 /**
   * Constructor.
@@ -43,10 +47,10 @@
   * @endcode
   */
 MicroBit::MicroBit() :
+    serial(USBTX, USBRX),
 	resetButton(MICROBIT_PIN_BUTTON_RESET),
     storage(),
     i2c(I2C_SDA0, I2C_SCL0),
-    serial(USBTX, USBRX),
     messageBus(),
     display(),
     buttonA(MICROBIT_PIN_BUTTON_A, MICROBIT_ID_BUTTON_A),
@@ -200,4 +204,5 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
             break;
     }
 }
+
 
