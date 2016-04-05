@@ -630,10 +630,4 @@ inline void MicroBit::panic(int statusCode)
 	microbit_panic(statusCode);
 }
 
-
-// Entry point for application programs. Called after the super-main function
-// has initialized the device and runtime environment.
-extern "C" void app_main();
-
-
 #endif
