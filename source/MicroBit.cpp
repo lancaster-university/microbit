@@ -29,22 +29,9 @@ RawSerial* SERIAL_DEBUG = NULL;
 
 /**
   * Constructor.
-  * Create a representation of a MicroBit device as a global singleton.
-  * @param messageBus callback function to receive MicroBitMessageBus events.
   *
-  * Exposed objects:
-  * @code
-  * uBit.systemTicker; //the Ticker callback that performs routines like updating the display.
-  * uBit.messageBus; //The message bus where events are fired.
-  * uBit.display; //The display object for the LED matrix.
-  * uBit.buttonA; //The buttonA object for button a.
-  * uBit.buttonB; //The buttonB object for button b.
-  * uBit.buttonAB; //The buttonAB object for button a+b multi press.
-  * uBit.resetButton; //The resetButton used for soft resets.
-  * uBit.accelerometer; //The object that represents the inbuilt accelerometer
-  * uBit.compass; //The object that represents the inbuilt compass(magnetometer)
-  * uBit.io.P*; //Where P* is P0 to P16, P19 & P20 on the edge connector
-  * @endcode
+  * Create a representation of a MicroBit device, which includes member variables
+  * that represent various device drivers used to control aspects of the micro:bit.
   */
 MicroBit::MicroBit() :
     serial(USBTX, USBRX),
@@ -81,14 +68,18 @@ MicroBit::MicroBit() :
 
 /**
   * Post constructor initialisation method.
-  * After *MUCH* pain, it's noted that the BLE stack can't be brought up in a
-  * static context, so we bring it up here rather than in the constructor.
-  * n.b. This method *must* be called in main() or later, not before.
   *
-  * Example:
+  * This call will initialised the scheduler, memory allocator and Bluetooth stack.
+  *
+  * This is required as the Bluetooth stack can't be brought up in a
+  * static context i.e. in a constructor.
+  *
   * @code
   * uBit.init();
   * @endcode
+  *
+  * @note This method must be called before user code utilises any functionality
+  *       contained by uBit.
   */
 void MicroBit::init()
 {
@@ -107,7 +98,7 @@ void MicroBit::init()
     seedRandom();
 
     // Create an event handler to trap any handlers being created for I2C services.
-    // We do this to enable initialisation of those services only when they're used, 
+    // We do this to enable initialisation of those services only when they're used,
     // which saves processor time, memeory and battery life.
     messageBus.listen(MICROBIT_ID_MESSAGE_BUS_LISTENER, MICROBIT_EVT_ANY, this, &MicroBit::onListenerRegisteredEvent);
 
@@ -204,5 +195,3 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
             break;
     }
 }
-
-
