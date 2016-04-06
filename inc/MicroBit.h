@@ -208,7 +208,7 @@ class MicroBit
     void sleep(uint32_t milliseconds);
 
     /**
-      * Seed the pseudo random number generator using the hardware generator.
+      * Seed the pseudo random number generator using the hardware random number generator.
       *
       * @code
       * uBit.seedRandom();
