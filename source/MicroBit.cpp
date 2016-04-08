@@ -208,6 +208,7 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
             break;
 
         case MICROBIT_ID_ACCELEROMETER:
+        case MICROBIT_ID_GESTURE:
             // A listener has been registered for the accelerometer.
             // The accelerometer uses lazy instantiation, we just need to read the data once to start it running.
             accelerometer.updateSample();
