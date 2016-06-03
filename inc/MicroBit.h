@@ -185,7 +185,7 @@ class MicroBit
       * Delay execution for the given amount of time.
       *
       * If the scheduler is running, this will deschedule the current fiber and perform
-      * a power efficent, concurrent sleep operation.
+      * a power efficient, concurrent sleep operation.
       *
       * If the scheduler is disabled or we're running in an interrupt context, this
       * will revert to a busy wait.
@@ -433,7 +433,7 @@ inline void MicroBit::reset()
   * Delay execution for the given amount of time.
   *
   * If the scheduler is running, this will deschedule the current fiber and perform
-  * a power efficent, concurrent sleep operation.
+  * a power efficient, concurrent sleep operation.
   *
   * If the scheduler is disabled or we're running in an interrupt context, this
   * will revert to a busy wait.
