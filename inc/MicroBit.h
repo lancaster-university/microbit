@@ -235,7 +235,7 @@ class MicroBit
       * than the hardware random number generator built int the processor, which takes
       * a long time and uses a lot of energy.
       *
-      * KIDS: You shouldn't use this is the real world to generte cryptographic keys though...
+      * KIDS: You shouldn't use this is the real world to generate cryptographic keys though...
       * have a think why not. :-)
       *
       * @param max the upper range to generate a number for. This number cannot be negative.
@@ -465,7 +465,7 @@ inline void MicroBit::sleep(uint32_t milliseconds)
   * than the hardware random number generator built int the processor, which takes
   * a long time and uses a lot of energy.
   *
-  * KIDS: You shouldn't use this is the real world to generte cryptographic keys though...
+  * KIDS: You shouldn't use this is the real world to generate cryptographic keys though...
   * have a think why not. :-)
   *
   * @param max the upper range to generate a number for. This number cannot be negative.
