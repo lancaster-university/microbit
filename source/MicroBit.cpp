@@ -37,6 +37,8 @@ DEALINGS IN THE SOFTWARE.
 #endif
 
 #include "MicroBit.h"
+#include "MicroBitDeviceInformationService.h"
+#include "MicroBitDFUService.h"
 
 #include "nrf_soc.h"
 
@@ -149,6 +151,10 @@ void MicroBit::init()
                 bleManager.init(getName(), true, CONFIG_ENABLED(MICROBIT_BLE_WHITELIST), CONFIG_ENABLED(MICROBIT_BLE_PRIVATE_ADDRESSES));
                 ble = bleManager.ble;
             }
+
+            // Bring up the standard services for pairing mode.
+            MicroBitDeviceInformationService::getInstance(*ble);
+            MicroBitDFUService::getInstance(*ble);
 
             // Enter pairing mode, using the LED matrix for any necessary pairing operations
             bleManager.pairingMode(display, buttonA);
