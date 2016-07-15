@@ -146,7 +146,7 @@ void MicroBit::init()
             // Start the BLE stack, if it isn't already running.
             if (!ble)
             {
-                bleManager.init(getName(), getSerial(), messageBus, true);
+                bleManager.init(getName(), getSerial(), messageBus, true, CONFIG_ENABLED(MICROBIT_BLE_WHITELIST), CONFIG_ENABLED(MICROBIT_BLE_PRIVATE_ADDRESSES));
                 ble = bleManager.ble;
             }
 
@@ -169,7 +169,7 @@ void MicroBit::init()
     // Start the BLE stack, if it isn't already running.
     if (!ble)
     {
-        bleManager.init(getName(), getSerial(), messageBus, false);
+        bleManager.init(getName(), getSerial(), messageBus, false, CONFIG_ENABLED(MICROBIT_BLE_WHITELIST), CONFIG_ENABLED(MICROBIT_BLE_PRIVATE_ADDRESSES));
         ble = bleManager.ble;
     }
 #endif
