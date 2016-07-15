@@ -143,7 +143,7 @@ void MicroBit::init()
         if (i == 10)
         {
 #if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR) && CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
-            microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT);
+            microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT, MICROBIT_HEAP_TYPE_BLE_RECYCLED);
 #endif
             // Start the BLE stack, if it isn't already running.
             if (!ble)
@@ -165,9 +165,9 @@ void MicroBit::init()
     // Attempt to bring up a second heap region, using unused memory normally reserved for Soft Device.
 #if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR) && CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
 #if CONFIG_ENABLED(MICROBIT_BLE_ENABLED)
-    microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT);
+    microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT, MICROBIT_HEAP_TYPE_BLE_RECYCLED);
 #else
-    microbit_create_heap(MICROBIT_SRAM_BASE, MICROBIT_SD_LIMIT);
+    microbit_create_heap(MICROBIT_SRAM_BASE, MICROBIT_SD_LIMIT, MICROBIT_HEAP_TYPE_BLE_RECYCLED);
 #endif
 #endif
 
