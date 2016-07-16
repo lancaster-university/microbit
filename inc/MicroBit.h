@@ -63,6 +63,15 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitMessageBus.h"
 
 #include "MicroBitBLEManager.h"
+#include "MicroBitDFUService.h"
+#include "MicroBitEventService.h"
+#include "MicroBitLEDService.h"
+#include "MicroBitAccelerometerService.h"
+#include "MicroBitMagnetometerService.h"
+#include "MicroBitButtonService.h"
+#include "MicroBitIOPinService.h"
+#include "MicroBitTemperatureService.h"
+
 #include "MicroBitRadio.h"
 #include "MicroBitStorage.h"
 
@@ -121,9 +130,8 @@ class MicroBit
     MicroBitIO                  io;
 
     // Bluetooth related member variables.
-	MicroBitBLEManager		    bleManager;
+	MicroBitBLEManager		    *ble;
     MicroBitRadio               radio;
-    BLEDevice                   *ble;
 
     /**
       * Constructor.
@@ -149,6 +157,13 @@ class MicroBit
       *       contained by uBit.
       */
     void init();
+
+    /**
+      * Determines the amount of memory unused by the SoftDevice BLE stack, and releases it to the system. 
+      * Call this only when you all Bluetooth configuraiton is complete. Any Bluetooth services 
+      * that attmept to register with the stack after this point will be denied.
+      */
+    int recycleGattTable();
 
     /**
       * Return the friendly name for this device.
@@ -417,10 +432,10 @@ inline ManagedString MicroBit::getSerial()
   */
 inline void MicroBit::reset()
 {
-    if(ble && ble->getGapState().connected) {
+    if(ble && ble->ble.getGapState().connected) {
 
         // We have a connected BLE peer. Disconnect the BLE session.
-        ble->gap().disconnect(Gap::REMOTE_USER_TERMINATED_CONNECTION);
+        ble->ble.gap().disconnect(Gap::REMOTE_USER_TERMINATED_CONNECTION);
 
         // Wait a little while for the connection to drop.
         wait_ms(100);

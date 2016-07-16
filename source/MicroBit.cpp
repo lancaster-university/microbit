@@ -81,9 +81,8 @@ MicroBit::MicroBit() :
        MICROBIT_ID_IO_P12,MICROBIT_ID_IO_P13,MICROBIT_ID_IO_P14,
        MICROBIT_ID_IO_P15,MICROBIT_ID_IO_P16,MICROBIT_ID_IO_P19,
        MICROBIT_ID_IO_P20),
-    bleManager(storage),
-    radio(),
-    ble(NULL)
+    ble(NULL),
+    radio()
 {
     // Clear our status
     status = 0;
@@ -147,17 +146,14 @@ void MicroBit::init()
 #endif
             // Start the BLE stack, if it isn't already running.
             if (!ble)
-            {
-                bleManager.init(getName(), true, CONFIG_ENABLED(MICROBIT_BLE_WHITELIST), CONFIG_ENABLED(MICROBIT_BLE_PRIVATE_ADDRESSES));
-                ble = bleManager.ble;
-            }
+                ble = new MicroBitBLEManager(getName(), storage, true, CONFIG_ENABLED(MICROBIT_BLE_WHITELIST), CONFIG_ENABLED(MICROBIT_BLE_PRIVATE_ADDRESSES));
 
             // Bring up the standard services for pairing mode.
             MicroBitDeviceInformationService::getInstance(*ble);
             MicroBitDFUService::getInstance(*ble);
 
             // Enter pairing mode, using the LED matrix for any necessary pairing operations
-            bleManager.pairingMode(display, buttonA);
+            ble->pairingMode(display, buttonA);
         }
     }
 #endif
@@ -174,11 +170,29 @@ void MicroBit::init()
 #if CONFIG_ENABLED(MICROBIT_BLE_ENABLED)
     // Start the BLE stack, if it isn't already running.
     if (!ble)
-    {
-        bleManager.init(getName(), false, CONFIG_ENABLED(MICROBIT_BLE_WHITELIST), CONFIG_ENABLED(MICROBIT_BLE_PRIVATE_ADDRESSES));
-        ble = bleManager.ble;
-    }
+        ble = new MicroBitBLEManager(getName(), storage, false, CONFIG_ENABLED(MICROBIT_BLE_WHITELIST), CONFIG_ENABLED(MICROBIT_BLE_PRIVATE_ADDRESSES));
 #endif
+}
+
+
+/**
+ * Determines the amount of memory unused by the SoftDevice BLE stack, and releases it to the system. 
+ * Call this only when you all Bluetooth configuraiton is complete. Any Bluetooth services 
+ * that attempt to register with the stack after this point will be denied.
+ *
+ * @return MICROBIT_OK on success, and MICROBIT_NO_RESOURCES if the BLE stack is not available.
+ */
+int MicroBit::recycleGattTable()
+{
+    if (ble && !ble->isLocked())
+    {
+        // Determine how much memory is available, and create a new heap.
+
+        ble->lock();
+        return MICROBIT_OK;    
+    }
+
+    return MICROBIT_NO_RESOURCES;
 }
 
 /**
