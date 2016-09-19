@@ -93,7 +93,11 @@ class MicroBit
     public:
 
     // Serial Interface
+#if CONFIG_ENABLED(MICROBIT_IF_CHIP_FS)
+    JMXSerial                   serial;
+#else
     MicroBitSerial              serial;
+#endif
 
 	// Reset Button
 	InterruptIn     		    resetButton;
