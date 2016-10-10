@@ -55,6 +55,7 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitMultiButton.h"
 
 #include "MicroBitSerial.h"
+#include "JMXSerial.h"
 #include "MicroBitIO.h"
 #include "MicroBitMatrixMaps.h"
 #include "MicroBitDisplay.h"
@@ -92,15 +93,8 @@ class MicroBit
 
     public:
 
-    // Serial Interface
-#if CONFIG_ENABLED(MICROBIT_IF_CHIP_FS)
-    JMXSerial                   serial;
-#else
-    MicroBitSerial              serial;
-#endif
-
-	// Reset Button
-	InterruptIn     		    resetButton;
+    // Reset Button
+    InterruptIn                 resetButton;
 
     // Persistent key value store
     MicroBitStorage             storage;
@@ -110,6 +104,13 @@ class MicroBit
 
     // Device level Message Bus abstraction
     MicroBitMessageBus          messageBus;
+
+    // Serial Interface
+#if CONFIG_ENABLED(MICROBIT_IF_CHIP_FS)
+    JMXSerial                   serial;
+#else
+    MicroBitSerial              serial;
+#endif
 
     // Member variables to represent each of the core components on the device.
     MicroBitDisplay             display;
@@ -125,7 +126,7 @@ class MicroBit
     MicroBitIO                  io;
 
     // Bluetooth related member variables.
-	MicroBitBLEManager		    bleManager;
+    MicroBitBLEManager          bleManager;
     MicroBitRadio               radio;
     BLEDevice                   *ble;
 
@@ -306,7 +307,7 @@ class MicroBit
       *
       * @note This interface is now deprecated, and will be removed in the next major release. Please use system_timer_add_component().
       */
-	int addSystemComponent(MicroBitComponent *component);
+    int addSystemComponent(MicroBitComponent *component);
 
     /**
       * Remove a component from the array of system components. This component will no longer receive
@@ -327,7 +328,7 @@ class MicroBit
       *
       * @note This interface is now deprecated, and will be removed in the next major release. Please use system_timer_remove_component().
       */
-	int removeSystemComponent(MicroBitComponent *component);
+    int removeSystemComponent(MicroBitComponent *component);
 
     /**
       * Adds a component to the array of idle thread components, which are processed
@@ -351,7 +352,7 @@ class MicroBit
       *
       * @note This interface is now deprecated, and will be removed in the next major release. Please use fiber_add_idle_component().
       */
-	int addIdleComponent(MicroBitComponent *component);
+    int addIdleComponent(MicroBitComponent *component);
 
     /**
       * Remove a component from the array of idle thread components
@@ -373,7 +374,7 @@ class MicroBit
       *
       * @note This interface is now deprecated, and will be removed in the next major release. Please use fiber_remove_idle_component().
       */
-	int removeIdleComponent(MicroBitComponent *component);
+    int removeIdleComponent(MicroBitComponent *component);
 };
 
 /**
@@ -532,7 +533,7 @@ inline void MicroBit::seedRandom(uint32_t seed)
   */
 inline int MicroBit::addSystemComponent(MicroBitComponent *component)
 {
-	return system_timer_add_component(component);
+    return system_timer_add_component(component);
 }
 
 /**
@@ -556,7 +557,7 @@ inline int MicroBit::addSystemComponent(MicroBitComponent *component)
   */
 inline int MicroBit::removeSystemComponent(MicroBitComponent *component)
 {
-	return system_timer_remove_component(component);
+    return system_timer_remove_component(component);
 }
 
 /**
@@ -583,7 +584,7 @@ inline int MicroBit::removeSystemComponent(MicroBitComponent *component)
   */
 inline int MicroBit::addIdleComponent(MicroBitComponent *component)
 {
-	return fiber_add_idle_component(component);
+    return fiber_add_idle_component(component);
 }
 
 /**
@@ -608,7 +609,7 @@ inline int MicroBit::addIdleComponent(MicroBitComponent *component)
   */
 inline int MicroBit::removeIdleComponent(MicroBitComponent *component)
 {
-	return fiber_remove_idle_component(component);
+    return fiber_remove_idle_component(component);
 }
 
 
@@ -656,7 +657,7 @@ inline const char *MicroBit::systemVersion()
 inline void MicroBit::panic(int statusCode)
 {
     //show error and enter infinite while
-	microbit_panic(statusCode);
+    microbit_panic(statusCode);
 }
 
 #endif
