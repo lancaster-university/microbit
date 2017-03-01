@@ -1,6 +1,6 @@
 {
   "name": "microbit",
-  "version": "2.0.0-rc7",
+  "version": "2.0.0-rc8",
   "description": "A simple to use collection of the most commonly used components in the micro:bit runtime",
   "license": "MIT",
   "dependencies": {
