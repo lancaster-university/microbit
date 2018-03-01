@@ -133,21 +133,23 @@ void MicroBit::init()
     // Set up a listener to enter BLE Pairing Mode
     messageBus.listen(MICROBIT_ID_PAIRING_MODE, MICROBIT_EVT_ANY, this, &MicroBit::enterPairingMode);
     
-    // Read Rentention Register
-    uint32_t volatile * GPREGRET = (uint32_t volatile *) 0x4000051C;
-    // Test if we need to enter BLE pairing mode...
     int i=0;
+    // Test if we need to enter BLE pairing mode...
+    KeyValuePair* BLEMode = storage.get("BLEMode");
     sleep(100);
-    while ((buttonA.isPressed() && buttonB.isPressed() && i<4) || (0x01 & *GPREGRET))
+    while ((buttonA.isPressed() && buttonB.isPressed() && i<4) || BLEMode != NULL)
     {
-        // Reset GPREGRET
-        *GPREGRET &= 0x01;
 
         sleep(100);
         i++;
 
         if (i == 4)
         {
+            // Remove KV
+            if(BLEMode != NULL)
+                storage.remove("BLEMode");
+            delete BLEMode; 
+
 #if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR) && CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
             microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT);
 #endif
@@ -236,9 +238,9 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
  */
 void MicroBit::enterPairingMode(MicroBitEvent evt)
 {
-    // Set Rentention Register
-    uint32_t volatile * GPREGRET = (uint32_t volatile *) 0x4000051C;
-    *GPREGRET |= 0x1;
+    // Add pairing mode key
+    uint8_t BLEMode = 1;
+    storage.put("BLEMode", &BLEMode, sizeof(BLEMode)); 
 
     // Reset micro:bit
     microbit_reset();
