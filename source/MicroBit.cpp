@@ -130,15 +130,23 @@ void MicroBit::init()
     status |= MICROBIT_INITIALIZED;
 
 #if CONFIG_ENABLED(MICROBIT_BLE_PAIRING_MODE)
+    // Set up a listener to enter BLE Pairing Mode
+    messageBus.listen(MICROBIT_ID_PAIRING_MODE, MICROBIT_EVT_ANY, this, &MicroBit::enterPairingMode);
+    
+    // Read Rentention Register
+    uint32_t volatile * GPREGRET = (uint32_t volatile *) 0x4000051C;
     // Test if we need to enter BLE pairing mode...
     int i=0;
     sleep(100);
-    while (buttonA.isPressed() && buttonB.isPressed() && i<10)
+    while ((buttonA.isPressed() && buttonB.isPressed() && i<4) || (0x01 & *GPREGRET))
     {
+        // Reset GPREGRET
+        *GPREGRET &= 0x01;
+
         sleep(100);
         i++;
 
-        if (i == 10)
+        if (i == 4)
         {
 #if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR) && CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
             microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT);
@@ -220,4 +228,18 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
             thermometer.updateSample();
             break;
     }
+}
+
+/**
+ * A listener to enter pairing mode when a specific MicroBitEvent is sent.
+ * This allows a user to create a custom action to enter the BLE bootloader rather than holding A+B
+ */
+void MicroBit::enterPairingMode(MicroBitEvent evt)
+{
+    // Set Rentention Register
+    uint32_t volatile * GPREGRET = (uint32_t volatile *) 0x4000051C;
+    *GPREGRET |= 0x1;
+
+    // Reset micro:bit
+    microbit_reset();
 }
