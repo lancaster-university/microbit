@@ -130,16 +130,33 @@ void MicroBit::init()
     status |= MICROBIT_INITIALIZED;
 
 #if CONFIG_ENABLED(MICROBIT_BLE_PAIRING_MODE)
-    // Test if we need to enter BLE pairing mode...
     int i=0;
+    // Test if we need to enter BLE pairing mode
+    // If a BLEMode Key has been set boot straight into BLE mode
+    KeyValuePair* BLEMode = storage.get("BLEMode");
+    KeyValuePair* flashIncomplete = storage.get("flashIncomplete");
     sleep(100);
-    while (buttonA.isPressed() && buttonB.isPressed() && i<10)
+    // Animation
+    uint8_t x = 0; uint8_t y = 0;
+    while ((buttonA.isPressed() && buttonB.isPressed() && i<25) || BLEMode != NULL || flashIncomplete != NULL)
     {
-        sleep(100);
-        i++;
+        display.image.setPixelValue(x,y,255);
+        sleep(50);
+        i++; x++;
 
-        if (i == 10)
+        // Gradually fill screen
+        if(x == 5){
+          y++; x = 0;
+        }
+
+        if (i == 25 || BLEMode != NULL)
         {
+            // Remove KV if it exists
+            if(BLEMode != NULL){
+                storage.remove("BLEMode");
+                delete BLEMode;
+            }
+
 #if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR) && CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
             microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT);
 #endif
