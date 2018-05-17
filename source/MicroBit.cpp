@@ -80,7 +80,11 @@ MicroBit::MicroBit() :
        MICROBIT_ID_IO_P15,MICROBIT_ID_IO_P16,MICROBIT_ID_IO_P19,
        MICROBIT_ID_IO_P20),
     bleManager(storage),
+#if MICROBIT_RADIO_VERSION == MICROBIT_RADIO_STANDARD
     radio(),
+#else
+    radio(0x1234),
+#endif
     ble(NULL)
 {
     // Clear our status

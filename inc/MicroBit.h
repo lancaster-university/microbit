@@ -122,7 +122,11 @@ class MicroBit
 
     // Bluetooth related member variables.
 	MicroBitBLEManager		    bleManager;
+#if MICROBIT_RADIO_VERSION == MICROBIT_RADIO_STANDARD
     MicroBitRadio               radio;
+#else
+    Radio               radio;
+#endif
     BLEDevice                   *ble;
 
     /**
