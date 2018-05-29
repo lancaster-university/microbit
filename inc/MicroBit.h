@@ -49,7 +49,10 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitPin.h"
 #include "MicroBitCompass.h"
 #include "MicroBitCompassCalibrator.h"
-#include "MicroBitAccelerometer.h"
+#include "MMA8653.h"
+#include "MAG3110.h"
+#include "LSM303Accelerometer.h"
+#include "LSM303Magnetometer.h"
 #include "MicroBitThermometer.h"
 #include "MicroBitLightSensor.h"
 #include "MicroBitMultiButton.h"
@@ -104,6 +107,9 @@ class MicroBit
     // I2C Interface
     MicroBitI2C                 i2c;
 
+    //An object of available IO pins on the device
+    MicroBitIO                  io;
+
     // Device level Message Bus abstraction
     MicroBitMessageBus          messageBus;
 
@@ -112,13 +118,14 @@ class MicroBit
     MicroBitButton              buttonA;
     MicroBitButton              buttonB;
     MicroBitMultiButton         buttonAB;
-    MicroBitAccelerometer       accelerometer;
-    MicroBitCompass             compass;
+    CoordinateSpace             coordinateSpace;
+    //MMA8653                     accelerometer;
+    //MAG3110                     compass;
+    LSM303Accelerometer         accelerometer;
+    LSM303Magnetometer          compass;
     MicroBitCompassCalibrator   compassCalibrator;
     MicroBitThermometer         thermometer;
 
-    //An object of available IO pins on the device
-    MicroBitIO                  io;
 
     // Bluetooth related member variables.
 	MicroBitBLEManager		    bleManager;

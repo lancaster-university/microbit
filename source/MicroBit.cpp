@@ -63,22 +63,25 @@ MicroBit::MicroBit() :
 	resetButton(MICROBIT_PIN_BUTTON_RESET),
     storage(),
     i2c(I2C_SDA0, I2C_SCL0),
-    messageBus(),
-    display(),
-    buttonA(MICROBIT_PIN_BUTTON_A, MICROBIT_ID_BUTTON_A),
-    buttonB(MICROBIT_PIN_BUTTON_B, MICROBIT_ID_BUTTON_B),
-    buttonAB(MICROBIT_ID_BUTTON_A,MICROBIT_ID_BUTTON_B, MICROBIT_ID_BUTTON_AB),
-    accelerometer(i2c),
-    compass(i2c, accelerometer, storage),
-    compassCalibrator(compass, accelerometer, display),
-    thermometer(storage),
     io(MICROBIT_ID_IO_P0,MICROBIT_ID_IO_P1,MICROBIT_ID_IO_P2,
        MICROBIT_ID_IO_P3,MICROBIT_ID_IO_P4,MICROBIT_ID_IO_P5,
        MICROBIT_ID_IO_P6,MICROBIT_ID_IO_P7,MICROBIT_ID_IO_P8,
        MICROBIT_ID_IO_P9,MICROBIT_ID_IO_P10,MICROBIT_ID_IO_P11,
        MICROBIT_ID_IO_P12,MICROBIT_ID_IO_P13,MICROBIT_ID_IO_P14,
        MICROBIT_ID_IO_P15,MICROBIT_ID_IO_P16,MICROBIT_ID_IO_P19,
-       MICROBIT_ID_IO_P20),
+       MICROBIT_ID_IO_P20, MICROBIT_ID_IO_INT1, MICROBIT_ID_IO_INT2),
+    messageBus(),
+    display(),
+    buttonA(MICROBIT_PIN_BUTTON_A, MICROBIT_ID_BUTTON_A),
+    buttonB(MICROBIT_PIN_BUTTON_B, MICROBIT_ID_BUTTON_B),
+    buttonAB(MICROBIT_ID_BUTTON_A,MICROBIT_ID_BUTTON_B, MICROBIT_ID_BUTTON_AB),
+    coordinateSpace(SIMPLE_CARTESIAN, true, COORDINATE_SPACE_ROTATED_0),
+    //accelerometer(i2c, io.int1, coordinateSpace),
+    //compass(i2c, io.int2, coordinateSpace),
+    accelerometer(i2c, io.P0, coordinateSpace),
+    compass(i2c, io.P1, coordinateSpace),
+    compassCalibrator(compass, accelerometer, display),
+    thermometer(storage),
     bleManager(storage),
     radio(),
     ble(NULL)
@@ -211,7 +214,7 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
         case MICROBIT_ID_GESTURE:
             // A listener has been registered for the accelerometer.
             // The accelerometer uses lazy instantiation, we just need to read the data once to start it running.
-            accelerometer.updateSample();
+            accelerometer.getSample();
             break;
 
         case MICROBIT_ID_THERMOMETER:
