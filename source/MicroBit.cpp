@@ -75,11 +75,17 @@ MicroBit::MicroBit() :
     buttonA(MICROBIT_PIN_BUTTON_A, MICROBIT_ID_BUTTON_A),
     buttonB(MICROBIT_PIN_BUTTON_B, MICROBIT_ID_BUTTON_B),
     buttonAB(MICROBIT_ID_BUTTON_A,MICROBIT_ID_BUTTON_B, MICROBIT_ID_BUTTON_AB),
-    coordinateSpace(SIMPLE_CARTESIAN, true, COORDINATE_SPACE_ROTATED_0),
+
+    // MMA8263 + MAG3110
+    //coordinateSpace(SIMPLE_CARTESIAN, true, COORDINATE_SPACE_ROTATED_0),
     //accelerometer(i2c, io.int1, coordinateSpace),
     //compass(i2c, io.int2, coordinateSpace),
+
+    // LSM303
+    coordinateSpace(SIMPLE_CARTESIAN, false, COORDINATE_SPACE_ROTATED_0),
     accelerometer(i2c, io.P0, coordinateSpace),
     compass(i2c, io.P1, coordinateSpace),
+
     compassCalibrator(compass, accelerometer, display),
     thermometer(storage),
     bleManager(storage),
