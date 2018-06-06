@@ -51,6 +51,7 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitCompassCalibrator.h"
 #include "MMA8653.h"
 #include "MAG3110.h"
+#include "FXOS8700.h"
 #include "LSM303Accelerometer.h"
 #include "LSM303Magnetometer.h"
 #include "MicroBitThermometer.h"
@@ -119,10 +120,24 @@ class MicroBit
     MicroBitButton              buttonB;
     MicroBitMultiButton         buttonAB;
     CoordinateSpace             coordinateSpace;
-    //MMA8653                     accelerometer;
-    //MAG3110                     compass;
-    LSM303Accelerometer         accelerometer;
-    LSM303Magnetometer          compass;
+
+    //
+    // FOR TESTING: PUT IN *ONE* of the following three blocks of code to select the driver to use.
+    // LEAVE OTHER BLOCKS COMMENTED OUT...
+    //
+    // For MMA/MAG combo as per micro:bit v1.3:
+    MMA8653                     accelerometer;
+    MAG3110                     compass;
+
+    // For ST LSM303:
+    //LSM303Accelerometer         accelerometer;
+    //LSM303Magnetometer          compass;
+
+    // For NXP FXOS8700:
+    //FXOS8700                    fxos8700;
+    //MicroBitAccelerometer       &accelerometer;
+    //MicroBitCompass             &compass;
+
     MicroBitCompassCalibrator   compassCalibrator;
     MicroBitThermometer         thermometer;
 

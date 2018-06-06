@@ -76,15 +76,25 @@ MicroBit::MicroBit() :
     buttonB(MICROBIT_PIN_BUTTON_B, MICROBIT_ID_BUTTON_B),
     buttonAB(MICROBIT_ID_BUTTON_A,MICROBIT_ID_BUTTON_B, MICROBIT_ID_BUTTON_AB),
 
+    //
+    // FOR TESTING: PUT IN *ONE* of the following three blocks of code to select the driver to use.
+    // LEAVE OTHER BLOCKS COMMENTED OUT...
+    //
     // MMA8263 + MAG3110
-    //coordinateSpace(SIMPLE_CARTESIAN, true, COORDINATE_SPACE_ROTATED_0),
-    //accelerometer(i2c, io.int1, coordinateSpace),
-    //compass(i2c, io.int2, coordinateSpace),
+    coordinateSpace(SIMPLE_CARTESIAN, true, COORDINATE_SPACE_ROTATED_0),
+    accelerometer(i2c, io.int1, coordinateSpace),
+    compass(i2c, io.int2, coordinateSpace),
 
     // LSM303
-    coordinateSpace(SIMPLE_CARTESIAN, false, COORDINATE_SPACE_ROTATED_0),
-    accelerometer(i2c, io.P0, coordinateSpace),
-    compass(i2c, io.P1, coordinateSpace),
+    //coordinateSpace(SIMPLE_CARTESIAN, false, COORDINATE_SPACE_ROTATED_0),
+    //accelerometer(i2c, io.P0, coordinateSpace),
+    //compass(i2c, io.P1, coordinateSpace),
+
+    // FXOS8700
+    //coordinateSpace(SIMPLE_CARTESIAN, false, COORDINATE_SPACE_ROTATED_0),
+    //fxos8700(i2c, io.P0, coordinateSpace),
+    //accelerometer(fxos8700),
+    //compass(fxos8700),
 
     compassCalibrator(compass, accelerometer, display),
     thermometer(storage),
