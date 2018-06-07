@@ -126,17 +126,17 @@ class MicroBit
     // LEAVE OTHER BLOCKS COMMENTED OUT...
     //
     // For MMA/MAG combo as per micro:bit v1.3:
-    MMA8653                     accelerometer;
-    MAG3110                     compass;
+    //MMA8653                     accelerometer;
+    //MAG3110                     compass;
 
     // For ST LSM303:
     //LSM303Accelerometer         accelerometer;
     //LSM303Magnetometer          compass;
 
     // For NXP FXOS8700:
-    //FXOS8700                    fxos8700;
-    //MicroBitAccelerometer       &accelerometer;
-    //MicroBitCompass             &compass;
+    FXOS8700                    fxos8700;
+    MicroBitAccelerometer       &accelerometer;
+    MicroBitCompass             &compass;
 
     MicroBitCompassCalibrator   compassCalibrator;
     MicroBitThermometer         thermometer;
