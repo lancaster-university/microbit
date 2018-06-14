@@ -87,13 +87,13 @@ MicroBit::MicroBit() :
     //compass(i2c, io.int2, coordinateSpace),
 
     // LSM303
-    //accelerometer(i2c, io.int1, coordinateSpace),
-    //compass(i2c, io.int2, coordinateSpace),
+    accelerometer(i2c, io.int1, coordinateSpace),
+    compass(i2c, io.int2, coordinateSpace),
 
     // FXOS8700
-    fxos8700(i2c, io.int3, coordinateSpace),
-    accelerometer(fxos8700),
-    compass(fxos8700),
+    //fxos8700(i2c, io.int3, coordinateSpace),
+    //accelerometer(fxos8700),
+    //compass(fxos8700),
 
     compassCalibrator(compass, accelerometer, display),
     thermometer(storage),

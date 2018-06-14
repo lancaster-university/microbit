@@ -130,13 +130,13 @@ class MicroBit
     //MAG3110                     compass;
 
     // For ST LSM303:
-    //LSM303Accelerometer         accelerometer;
-    //LSM303Magnetometer          compass;
+    LSM303Accelerometer         accelerometer;
+    LSM303Magnetometer          compass;
 
     // For NXP FXOS8700:
-    FXOS8700                    fxos8700;
-    MicroBitAccelerometer       &accelerometer;
-    MicroBitCompass             &compass;
+    //FXOS8700                    fxos8700;
+    //MicroBitAccelerometer       &accelerometer;
+    //MicroBitCompass             &compass;
 
     MicroBitCompassCalibrator   compassCalibrator;
     MicroBitThermometer         thermometer;
