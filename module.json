@@ -4,7 +4,7 @@
   "description": "A simple to use collection of the most commonly used components in the micro:bit runtime",
   "license": "MIT",
   "dependencies": {
-    "microbit-dal": "lancaster-university/microbit-dal#v2.0.0-rc10"
+    "microbit-dal": "microbit-sam/microbit-dal#pf_v0.3.4"
   },
   "extraIncludes": [
     "inc"
