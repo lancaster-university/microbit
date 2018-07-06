@@ -33,7 +33,6 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitDevice.h"
 #include "ErrorNo.h"
 #include "MicroBitSystemTimer.h"
-#include "Matrix4.h"
 #include "MicroBitCompat.h"
 #include "MicroBitComponent.h"
 #include "ManagedType.h"
@@ -112,8 +111,8 @@ class MicroBit
     MicroBitButton              buttonA;
     MicroBitButton              buttonB;
     MicroBitMultiButton         buttonAB;
-    MicroBitAccelerometer       accelerometer;
-    MicroBitCompass             compass;
+    MicroBitAccelerometer       &accelerometer;
+    MicroBitCompass             &compass;
     MicroBitCompassCalibrator   compassCalibrator;
     MicroBitThermometer         thermometer;
 
