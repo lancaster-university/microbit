@@ -96,7 +96,9 @@ MicroBit::MicroBit() :
     resetButton.mode(PullUp);
     resetButton.fall(this, &MicroBit::reset);
 
+#if MICROBIT_RADIO_VERSION != MICROBIT_RADIO_STANDARD
     radio.cloud.setAppId( microbit_random(10000)+100 );
+#endif
 }
 
 /**
