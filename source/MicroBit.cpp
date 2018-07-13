@@ -83,7 +83,8 @@ MicroBit::MicroBit() :
 #if MICROBIT_RADIO_VERSION == MICROBIT_RADIO_STANDARD
     radio(),
 #else
-    radio(0x1234),
+    // radio(0x1234),
+    radio(microbit_random(10000) + 100),
 #endif
     ble(NULL)
 {
