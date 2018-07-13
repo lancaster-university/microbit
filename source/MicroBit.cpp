@@ -83,9 +83,9 @@ MicroBit::MicroBit() :
 #if MICROBIT_RADIO_VERSION == MICROBIT_RADIO_STANDARD
     radio(),
 #else
-    // radio(0x1234),
+    radio(0x1234),
     // radio(microbit_random(10000) + 100),
-    radio(0x4321),
+    // radio(0x4321),
 #endif
     ble(NULL)
 {
@@ -95,6 +95,8 @@ MicroBit::MicroBit() :
     // Bring up soft reset functionality as soon as possible.
     resetButton.mode(PullUp);
     resetButton.fall(this, &MicroBit::reset);
+
+    radio.cloud.setAppId( microbit_random(10000)+100 );
 }
 
 /**
