@@ -84,7 +84,8 @@ MicroBit::MicroBit() :
     radio(),
 #else
     // radio(0x1234),
-    radio(microbit_random(10000) + 100),
+    // radio(microbit_random(10000) + 100),
+    radio(0x4321),
 #endif
     ble(NULL)
 {
