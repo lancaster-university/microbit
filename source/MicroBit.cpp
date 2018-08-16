@@ -131,7 +131,7 @@ void MicroBit::init()
     status |= MICROBIT_INITIALIZED;
 
 #if CONFIG_ENABLED(MICROBIT_BLE_PAIRING_MODE)
-    int i=0;
+    uint8_t i=0;
     // Test if we need to enter BLE pairing mode
     // If a RebootMode Key has been set boot straight into BLE mode
     KeyValuePair* RebootMode = storage.get("RebootMode");
@@ -141,15 +141,15 @@ void MicroBit::init()
     uint8_t x = 0; uint8_t y = 0;
     while ((buttonA.isPressed() && buttonB.isPressed() && i<25) || RebootMode != NULL || flashIncomplete != NULL)
     {
+        // Gradually fill the screen
         display.image.setPixelValue(x,y,255);
         sleep(50);
         i++; x++;
-
-        // Gradually fill screen
         if(x == 5){
-          y++; x = 0;
+            y++; x = 0;
         }
-
+    
+        // Once enough time has elapsed or reboot has been requested enter Bluetooth mode
         if (i == 25 || RebootMode != NULL)
         {
             // Remove KV if it exists
@@ -158,14 +158,14 @@ void MicroBit::init()
             }
             delete RebootMode;
             delete flashIncomplete;
-
+    
 #if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR) && CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
             microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT);
 #endif
             // Start the BLE stack, if it isn't already running.
             if (!ble)
             {
-                bleManager.init(getName(), getSerial(), messageBus, true);
+                bleManager.init(getName(), getSerial(), messageBus, true, getModel());
                 ble = bleManager.ble;
             }
 
@@ -173,6 +173,14 @@ void MicroBit::init()
             bleManager.pairingMode(display, buttonA);
         }
     }
+    // Fade screen out
+    for(uint8_t brightness = 255; 0 < brightness; brightness = brightness - 5)
+    {
+        display.setBrightness(brightness);
+        sleep(2);
+    }
+    display.clear();
+    display.setBrightness(255);
 #endif
 
     // Attempt to bring up a second heap region, using unused memory normally reserved for Soft Device.
@@ -188,10 +196,11 @@ void MicroBit::init()
     // Start the BLE stack, if it isn't already running.
     if (!ble)
     {
-        bleManager.init(getName(), getSerial(), messageBus, false);
+        bleManager.init(getName(), getSerial(), messageBus, false, getModel());
         ble = bleManager.ble;
     }
 #endif
+
 }
 
 /**
@@ -239,4 +248,21 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
             thermometer.updateSample();
             break;
     }
+}
+
+ManagedString MicroBit::getModel()
+{
+   switch(MicroBitAccelerometer::detectedAccelerometer->whatAmI())
+   {
+        case 1:
+            return ManagedString(MICROBIT_MODEL_1_3_X);
+            break;
+        case 2:
+        case 3:
+            return ManagedString(MICROBIT_MODEL_1_5_X);
+            break;
+        default:
+            return ManagedString(MICROBIT_MODEL_UNKNOWN);
+
+   }
 }

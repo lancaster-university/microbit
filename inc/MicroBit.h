@@ -172,6 +172,16 @@ class MicroBit
     static ManagedString getSerial();
 
     /**
+      * Return the model of the micro:bit
+      *
+      * @return A ManagedString representing the serial number of this device.
+      *
+      * @code
+      * ManagedString model = uBit.getModel();
+      */
+    ManagedString getModel();
+
+    /**
       * Will reset the micro:bit when called.
       *
       * @code
