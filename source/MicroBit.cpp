@@ -165,7 +165,8 @@ void MicroBit::init()
             // Start the BLE stack, if it isn't already running.
             if (!ble)
             {
-                bleManager.init(getName(), getSerial(), messageBus, true, getModel());
+                ManagedString model = getModel();
+                bleManager.init(getName(), getSerial(), messageBus, true, model);
                 ble = bleManager.ble;
             }
 
@@ -196,7 +197,8 @@ void MicroBit::init()
     // Start the BLE stack, if it isn't already running.
     if (!ble)
     {
-        bleManager.init(getName(), getSerial(), messageBus, false, getModel());
+        ManagedString model = getModel();
+        bleManager.init(getName(), getSerial(), messageBus, false, model);
         ble = bleManager.ble;
     }
 #endif
@@ -254,11 +256,11 @@ ManagedString MicroBit::getModel()
 {
    switch(MicroBitAccelerometer::detectedAccelerometer->whatAmI())
    {
-        case 1:
+        case MICROBIT_ACCELEROMETER_MMA8653:
             return ManagedString(MICROBIT_MODEL_1_3_X);
             break;
-        case 2:
-        case 3:
+        case MICROBIT_ACCELEROMETER_LSM303:
+        case MICROBIT_ACCELEROMETER_FXOS87003:
             return ManagedString(MICROBIT_MODEL_1_5_X);
             break;
         default:
