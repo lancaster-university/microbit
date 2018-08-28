@@ -260,7 +260,7 @@ ManagedString MicroBit::getModel()
             return ManagedString(MICROBIT_MODEL_1_3_X);
             break;
         case MICROBIT_ACCELEROMETER_LSM303:
-        case MICROBIT_ACCELEROMETER_FXOS87003:
+        case MICROBIT_ACCELEROMETER_FXOS8700:
             return ManagedString(MICROBIT_MODEL_1_5_X);
             break;
         default:
