@@ -4,7 +4,7 @@
   "description": "A simple to use collection of the most commonly used components in the micro:bit runtime",
   "license": "MIT",
   "dependencies": {
-    "microbit-dal": "lancaster-university/microbit-dal#whatami"
+    "microbit-dal": "microbit-sam/microbit-dal#whatami"
   },
   "extraIncludes": [
     "inc"
