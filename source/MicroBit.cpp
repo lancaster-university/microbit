@@ -154,7 +154,7 @@ void MicroBit::init()
             delete RebootMode;
             delete flashIncomplete;
 
-#if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR) && CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
+#if CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
             microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT);
 #endif
             // Start the BLE stack, if it isn't already running.
@@ -171,7 +171,7 @@ void MicroBit::init()
 #endif
 
     // Attempt to bring up a second heap region, using unused memory normally reserved for Soft Device.
-#if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR) && CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
+#if CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
 #if CONFIG_ENABLED(MICROBIT_BLE_ENABLED)
     microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT);
 #else
@@ -180,12 +180,14 @@ void MicroBit::init()
 #endif
 
 #if CONFIG_ENABLED(MICROBIT_BLE_ENABLED)
+    SERIAL_DEBUG->printf("***BLE_INIT***\r\n");
     // Start the BLE stack, if it isn't already running.
     if (!ble)
     {
         bleManager.init(getName(), getSerial(), messageBus, false);
         ble = bleManager.ble;
     }
+    SERIAL_DEBUG->printf("***BLE_INIT_COMPLETE***\r\n");
 #endif
 }
 
