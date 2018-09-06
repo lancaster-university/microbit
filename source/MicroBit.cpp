@@ -112,11 +112,6 @@ void MicroBit::init()
     if (status & MICROBIT_INITIALIZED)
         return;
 
-#if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR)
-    // Bring up a nested heap allocator.
-    microbit_create_nested_heap(MICROBIT_NESTED_HEAP_SIZE);
-#endif
-
     // Bring up fiber scheduler.
     scheduler_init(messageBus);
 
