@@ -112,11 +112,6 @@ void MicroBit::init()
     if (status & MICROBIT_INITIALIZED)
         return;
 
-#if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR)
-    // Bring up a nested heap allocator.
-    microbit_create_nested_heap(MICROBIT_NESTED_HEAP_SIZE);
-#endif
-
     // Bring up fiber scheduler.
     scheduler_init(messageBus);
 
@@ -159,7 +154,7 @@ void MicroBit::init()
             delete RebootMode;
             delete flashIncomplete;
 
-#if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR) && CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
+#if CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
             microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT);
 #endif
             // Start the BLE stack, if it isn't already running.
@@ -176,7 +171,7 @@ void MicroBit::init()
 #endif
 
     // Attempt to bring up a second heap region, using unused memory normally reserved for Soft Device.
-#if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR) && CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
+#if CONFIG_ENABLED(MICROBIT_HEAP_REUSE_SD)
 #if CONFIG_ENABLED(MICROBIT_BLE_ENABLED)
     microbit_create_heap(MICROBIT_SD_GATT_TABLE_START + MICROBIT_SD_GATT_TABLE_SIZE, MICROBIT_SD_LIMIT);
 #else
