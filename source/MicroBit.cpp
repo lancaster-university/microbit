@@ -180,14 +180,12 @@ void MicroBit::init()
 #endif
 
 #if CONFIG_ENABLED(MICROBIT_BLE_ENABLED)
-    SERIAL_DEBUG->printf("***BLE_INIT***\r\n");
     // Start the BLE stack, if it isn't already running.
     if (!ble)
     {
         bleManager.init(getName(), getSerial(), messageBus, false);
         ble = bleManager.ble;
     }
-    SERIAL_DEBUG->printf("***BLE_INIT_COMPLETE***\r\n");
 #endif
 }
 
