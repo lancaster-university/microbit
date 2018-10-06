@@ -65,6 +65,7 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitBLEManager.h"
 #include "MicroBitRadio.h"
 #include "MicroBitStorage.h"
+#include "NRF51Timer.h"
 
 // MicroBit::flags values
 #define MICROBIT_INITIALIZED                    0x01
@@ -95,8 +96,8 @@ class MicroBit
     // Serial Interface
     MicroBitSerial              serial;
 
-	// Reset Button
-	InterruptIn     		    resetButton;
+    // Reset Button
+    InterruptIn                 resetButton;
 
     // Persistent key value store
     MicroBitStorage             storage;
@@ -121,11 +122,14 @@ class MicroBit
     MicroBitIO                  io;
 
     // Bluetooth related member variables.
-	MicroBitBLEManager		    bleManager;
+	MicroBitBLEManager		        bleManager;
 #if MICROBIT_RADIO_VERSION == MICROBIT_RADIO_STANDARD
     MicroBitRadio               radio;
-#else
-    Radio               radio;
+#elif MICROBIT_RADIO_VERSION == MICROBIT_RADIO_PERIDO
+    NRF51Timer                  timer0;
+    MicroBitPeridoRadio         radio;
+#elif MICROBIT_RADIO_VERSION == MICROBIT_RADIO_REST
+    Radio                       radio;
 #endif
     BLEDevice                   *ble;
 

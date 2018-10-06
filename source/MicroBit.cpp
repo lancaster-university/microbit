@@ -82,10 +82,11 @@ MicroBit::MicroBit() :
     bleManager(storage),
 #if MICROBIT_RADIO_VERSION == MICROBIT_RADIO_STANDARD
     radio(),
-#else
+#elif MICROBIT_RADIO_VERSION == MICROBIT_RADIO_PERIDO
+    timer0(NRF_TIMER0, TIMER0_IRQn, 4),
+    radio(timer0),
+#elif MICROBIT_RADIO_VERSION == MICROBIT_RADIO_REST
     radio(0x1234),
-    // radio(microbit_random(10000) + 100),
-    // radio(0x4321),
 #endif
     ble(NULL)
 {
@@ -96,7 +97,7 @@ MicroBit::MicroBit() :
     resetButton.mode(PullUp);
     resetButton.fall(this, &MicroBit::reset);
 
-#if MICROBIT_RADIO_VERSION != MICROBIT_RADIO_STANDARD
+#if MICROBIT_RADIO_VERSION == MICROBIT_RADIO_REST
     radio.cloud.setAppId( microbit_random(10000)+100 );
 #endif
 }
