@@ -72,6 +72,7 @@ MicroBit::MicroBit() :
     compass(i2c, accelerometer, storage),
     compassCalibrator(compass, accelerometer, display),
     thermometer(storage),
+    energyMonitor(compass),
     io(MICROBIT_ID_IO_P0,MICROBIT_ID_IO_P1,MICROBIT_ID_IO_P2,
        MICROBIT_ID_IO_P3,MICROBIT_ID_IO_P4,MICROBIT_ID_IO_P5,
        MICROBIT_ID_IO_P6,MICROBIT_ID_IO_P7,MICROBIT_ID_IO_P8,

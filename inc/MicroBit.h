@@ -53,6 +53,7 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitThermometer.h"
 #include "MicroBitLightSensor.h"
 #include "MicroBitMultiButton.h"
+#include "MicroBitEnergyMonitor.h"
 
 #include "MicroBitSerial.h"
 #include "MicroBitIO.h"
@@ -117,6 +118,7 @@ class MicroBit
     MicroBitCompass             compass;
     MicroBitCompassCalibrator   compassCalibrator;
     MicroBitThermometer         thermometer;
+    MicroBitEnergyMonitor       energyMonitor;
 
     //An object of available IO pins on the device
     MicroBitIO                  io;
@@ -124,11 +126,14 @@ class MicroBit
     // Bluetooth related member variables.
 	MicroBitBLEManager		        bleManager;
 #if MICROBIT_RADIO_VERSION == MICROBIT_RADIO_STANDARD
+#pragma message "STANDARD RADIO IN USE"
     MicroBitRadio               radio;
 #elif MICROBIT_RADIO_VERSION == MICROBIT_RADIO_PERIDO
+#pragma message "PERIDO RADIO IN USE"
     NRF51Timer                  timer0;
     MicroBitPeridoRadio         radio;
 #elif MICROBIT_RADIO_VERSION == MICROBIT_RADIO_REST
+#pragma message "REST RADIO IN USE"
     Radio                       radio;
 #endif
     BLEDevice                   *ble;
