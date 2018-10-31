@@ -54,6 +54,7 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitLightSensor.h"
 #include "MicroBitMultiButton.h"
 #include "MicroBitEnergyMonitor.h"
+#include "MicroBitEnergyMonitorCalibrator.h"
 
 #include "MicroBitSerial.h"
 #include "MicroBitIO.h"
@@ -119,6 +120,7 @@ class MicroBit
     MicroBitCompassCalibrator   compassCalibrator;
     MicroBitThermometer         thermometer;
     MicroBitEnergyMonitor       energyMonitor;
+    MicroBitEnergyMonitorCalibrator       energyMonitorCalibrator;
 
     //An object of available IO pins on the device
     MicroBitIO                  io;
