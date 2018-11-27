@@ -85,7 +85,7 @@ class MicroBit
       * the compass and the accelerometer, where we only want to add them to the idle
       * fiber when someone has the intention of using these components.
       */
-    void                        onListenerRegisteredEvent(MicroBitEvent evt);
+    void                        onSystemEvent(MicroBitEvent evt);
 
     uint8_t                     status;
 

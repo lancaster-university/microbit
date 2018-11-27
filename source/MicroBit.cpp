@@ -120,7 +120,7 @@ void MicroBit::init()
     // Create an event handler to trap any handlers being created for I2C services.
     // We do this to enable initialisation of those services only when they're used,
     // which saves processor time, memeory and battery life.
-    messageBus.listen(MICROBIT_ID_ANY, MICROBIT_EVT_ANY, this, &MicroBit::onListenerRegisteredEvent);
+    messageBus.listen(MICROBIT_ID_SYSTEM, MICROBIT_EVT_ANY, this, &MicroBit::onSystemEvent);
 
     status |= MICROBIT_INITIALIZED;
 
@@ -206,7 +206,7 @@ void MicroBit::init()
   * the compass and the accelerometer, where we only want to add them to the idle
   * fiber when someone has the intention of using these components.
   */
-void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
+void MicroBit::onSystemEvent(MicroBitEvent evt)
 {
     switch(evt.value)
     {
