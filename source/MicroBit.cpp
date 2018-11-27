@@ -125,7 +125,7 @@ void MicroBit::init()
     status |= MICROBIT_INITIALIZED;
 
 #if CONFIG_ENABLED(MICROBIT_BLE_PAIRING_MODE)
-    int i=0;
+    uint8_t i=0;
     // Test if we need to enter BLE pairing mode
     // If a RebootMode Key has been set boot straight into BLE mode
     KeyValuePair* RebootMode = storage.get("RebootMode");
@@ -135,15 +135,15 @@ void MicroBit::init()
     uint8_t x = 0; uint8_t y = 0;
     while ((buttonA.isPressed() && buttonB.isPressed() && i<25) || RebootMode != NULL || flashIncomplete != NULL)
     {
+        // Gradually fill the screen
         display.image.setPixelValue(x,y,255);
         sleep(50);
         i++; x++;
-
-        // Gradually fill screen
         if(x == 5){
-          y++; x = 0;
+            y++; x = 0;
         }
-
+    
+        // Once enough time has elapsed or reboot has been requested enter Bluetooth mode
         if (i == 25 || RebootMode != NULL)
         {
             // Remove KV if it exists
@@ -159,7 +159,8 @@ void MicroBit::init()
             // Start the BLE stack, if it isn't already running.
             if (!ble)
             {
-                bleManager.init(getName(), getSerial(), messageBus, true);
+                ManagedString model = getModel();
+                bleManager.init(getName(), getSerial(), messageBus, true, model);
                 ble = bleManager.ble;
             }
 
@@ -167,6 +168,14 @@ void MicroBit::init()
             bleManager.pairingMode(display, buttonA);
         }
     }
+    // Fade screen out
+    for(uint8_t brightness = 255; 0 < brightness; brightness = brightness - 5)
+    {
+        display.setBrightness(brightness);
+        sleep(2);
+    }
+    display.clear();
+    display.setBrightness(255);
 #endif
 
     // Attempt to bring up a second heap region, using unused memory normally reserved for Soft Device.
@@ -182,10 +191,12 @@ void MicroBit::init()
     // Start the BLE stack, if it isn't already running.
     if (!ble)
     {
-        bleManager.init(getName(), getSerial(), messageBus, false);
+        ManagedString model = getModel();
+        bleManager.init(getName(), getSerial(), messageBus, false, model);
         ble = bleManager.ble;
     }
 #endif
+
 }
 
 /**
@@ -244,4 +255,21 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
             break;
         #endif
     }
+}
+
+ManagedString MicroBit::getModel()
+{
+   switch(MicroBitAccelerometer::detectedAccelerometer->whatAmI())
+   {
+        case MICROBIT_ACCELEROMETER_MMA8653:
+            return ManagedString(MICROBIT_MODEL_1_3_X);
+            break;
+        case MICROBIT_ACCELEROMETER_LSM303:
+        case MICROBIT_ACCELEROMETER_FXOS8700:
+            return ManagedString(MICROBIT_MODEL_1_5_X);
+            break;
+        default:
+            return ManagedString(MICROBIT_MODEL_UNKNOWN);
+
+   }
 }
