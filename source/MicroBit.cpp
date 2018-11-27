@@ -120,7 +120,7 @@ void MicroBit::init()
     // Create an event handler to trap any handlers being created for I2C services.
     // We do this to enable initialisation of those services only when they're used,
     // which saves processor time, memeory and battery life.
-    messageBus.listen(MICROBIT_ID_MESSAGE_BUS_LISTENER, MICROBIT_EVT_ANY, this, &MicroBit::onListenerRegisteredEvent);
+    messageBus.listen(MICROBIT_ID_ANY, MICROBIT_EVT_ANY, this, &MicroBit::onListenerRegisteredEvent);
 
     status |= MICROBIT_INITIALIZED;
 
@@ -231,5 +231,17 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
             // The thermometer uses lazy instantiation, we just need to read the data once to start it running.
             thermometer.updateSample();
             break;
+        #ifdef MICROBIT_BLE_PAIRING_MODE
+        case MICROBIT_ID_RESET_INTO_PAIRING:
+            // Reset the micro:bit into pairing mode
+            KeyValuePair* RebootMode = storage.get("RebootMode");
+            if(RebootMode == NULL){
+              uint8_t RebootModeValue = MICROBIT_MODE_PAIRING;
+              storage.put("RebootMode", &RebootModeValue, sizeof(RebootMode));
+              delete RebootMode;
+            }
+            microbit_reset();
+            break;
+        #endif
     }
 }
