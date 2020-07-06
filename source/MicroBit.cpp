@@ -59,11 +59,11 @@ RawSerial* SERIAL_DEBUG = NULL;
   * that represent various device drivers used to control aspects of the micro:bit.
   */
 MicroBit::MicroBit() :
-    serial(USBTX, USBRX),
-	resetButton(MICROBIT_PIN_BUTTON_RESET),
+    resetButton(MICROBIT_PIN_BUTTON_RESET),
     storage(),
     i2c(I2C_SDA0, I2C_SCL0),
     messageBus(),
+    serial(USBTX, USBRX),
     display(),
     buttonA(MICROBIT_PIN_BUTTON_A, MICROBIT_ID_BUTTON_A),
     buttonB(MICROBIT_PIN_BUTTON_B, MICROBIT_ID_BUTTON_B),
