@@ -52,6 +52,14 @@ DEALINGS IN THE SOFTWARE.
 RawSerial* SERIAL_DEBUG = NULL;
 #endif
 
+void resetClickTimeout(void *param)
+{
+    MicroBit &uBit = *(MicroBit *)param;
+
+    uBit.sleep(500);
+    uBit.accelerometer.updateStorage(0);
+}
+
 /**
   * Constructor.
   *
@@ -106,10 +114,16 @@ MicroBit::MicroBit() :
   * @note This method must be called before user code utilises any functionality
   *       contained by uBit.
   */
+
 void MicroBit::init()
 {
     if (status & MICROBIT_INITIALIZED)
         return;
+
+    int resetClickCount = accelerometer.getStorage() + 1;
+    accelerometer.updateStorage(resetClickCount);
+
+    serial.printf(" resetClickCount = %d.\n", resetClickCount);
 
     // Bring up fiber scheduler.
     scheduler_init(messageBus);
@@ -133,7 +147,15 @@ void MicroBit::init()
     sleep(100);
     // Animation
     uint8_t x = 0; uint8_t y = 0;
-    while ((buttonA.isPressed() && buttonB.isPressed() && i<25) || RebootMode != NULL || flashIncomplete != NULL)
+    bool triple_reset = 0;
+
+#if CONFIG_ENABLED(DEVICE_TRIPLE_RESET_TO_PAIR)
+    triple_reset = (resetClickCount == 3);
+    if (triple_reset)
+        accelerometer.updateStorage(0);
+#endif
+
+    while (((triple_reset || (buttonA.isPressed() && buttonB.isPressed())) && i<25) || RebootMode != NULL || flashIncomplete != NULL)
     {
         display.image.setPixelValue(x,y,255);
         sleep(50);
@@ -186,6 +208,8 @@ void MicroBit::init()
         ble = bleManager.ble;
     }
 #endif
+
+    create_fiber(resetClickTimeout, this);
 }
 
 /**
