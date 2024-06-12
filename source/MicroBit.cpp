@@ -120,12 +120,12 @@ void MicroBit::init()
     // Create an event handler to trap any handlers being created for I2C services.
     // We do this to enable initialisation of those services only when they're used,
     // which saves processor time, memeory and battery life.
-    messageBus.listen(MICROBIT_ID_MESSAGE_BUS_LISTENER, MICROBIT_EVT_ANY, this, &MicroBit::onListenerRegisteredEvent);
+    messageBus.listen(MICROBIT_ID_SYSTEM, MICROBIT_EVT_ANY, this, &MicroBit::onSystemEvent);
 
     status |= MICROBIT_INITIALIZED;
 
 #if CONFIG_ENABLED(MICROBIT_BLE_PAIRING_MODE)
-    int i=0;
+    uint8_t i=0;
     // Test if we need to enter BLE pairing mode
     // If a RebootMode Key has been set boot straight into BLE mode
     KeyValuePair* RebootMode = storage.get("RebootMode");
@@ -135,15 +135,15 @@ void MicroBit::init()
     uint8_t x = 0; uint8_t y = 0;
     while ((buttonA.isPressed() && buttonB.isPressed() && i<25) || RebootMode != NULL || flashIncomplete != NULL)
     {
+        // Gradually fill the screen
         display.image.setPixelValue(x,y,255);
         sleep(20);
         i++; x++;
-
-        // Gradually fill screen
         if(x == 5){
-          y++; x = 0;
+            y++; x = 0;
         }
-
+    
+        // Once enough time has elapsed or reboot has been requested enter Bluetooth mode
         if (i == 25 || RebootMode != NULL)
         {
             // Remove KV if it exists
@@ -159,7 +159,8 @@ void MicroBit::init()
             // Start the BLE stack, if it isn't already running.
             if (!ble)
             {
-                bleManager.init(getName(), getSerial(), messageBus, true);
+                ManagedString model = getModel();
+                bleManager.init(getName(), getSerial(), messageBus, true, model);
                 ble = bleManager.ble;
             }
 
@@ -167,6 +168,14 @@ void MicroBit::init()
             bleManager.pairingMode(display, buttonA);
         }
     }
+    // Fade screen out
+    for(uint8_t brightness = 255; 0 < brightness; brightness = brightness - 5)
+    {
+        display.setBrightness(brightness);
+        sleep(2);
+    }
+    display.clear();
+    display.setBrightness(255);
 #endif
 
     // Attempt to bring up a second heap region, using unused memory normally reserved for Soft Device.
@@ -182,10 +191,12 @@ void MicroBit::init()
     // Start the BLE stack, if it isn't already running.
     if (!ble)
     {
-        bleManager.init(getName(), getSerial(), messageBus, false);
+        ManagedString model = getModel();
+        bleManager.init(getName(), getSerial(), messageBus, false, model);
         ble = bleManager.ble;
     }
 #endif
+
 }
 
 /**
@@ -195,7 +206,7 @@ void MicroBit::init()
   * the compass and the accelerometer, where we only want to add them to the idle
   * fiber when someone has the intention of using these components.
   */
-void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
+void MicroBit::onSystemEvent(MicroBitEvent evt)
 {
     switch(evt.value)
     {
@@ -231,5 +242,34 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
             // The thermometer uses lazy instantiation, we just need to read the data once to start it running.
             thermometer.updateSample();
             break;
+        #ifdef MICROBIT_BLE_PAIRING_MODE
+        case MICROBIT_ID_RESET_INTO_PAIRING:
+            // Reset the micro:bit into pairing mode
+            KeyValuePair* RebootMode = storage.get("RebootMode");
+            if(RebootMode == NULL){
+              uint8_t RebootModeValue = MICROBIT_MODE_PAIRING;
+              storage.put("RebootMode", &RebootModeValue, sizeof(RebootMode));
+              delete RebootMode;
+            }
+            microbit_reset();
+            break;
+        #endif
     }
+}
+
+ManagedString MicroBit::getModel()
+{
+   switch(MicroBitAccelerometer::detectedAccelerometer->whatAmI())
+   {
+        case MICROBIT_ACCELEROMETER_MMA8653:
+            return ManagedString(MICROBIT_MODEL_1_3_X);
+            break;
+        case MICROBIT_ACCELEROMETER_LSM303:
+        case MICROBIT_ACCELEROMETER_FXOS8700:
+            return ManagedString(MICROBIT_MODEL_1_5_X);
+            break;
+        default:
+            return ManagedString(MICROBIT_MODEL_UNKNOWN);
+
+   }
 }

@@ -85,7 +85,7 @@ class MicroBit
       * the compass and the accelerometer, where we only want to add them to the idle
       * fiber when someone has the intention of using these components.
       */
-    void                        onListenerRegisteredEvent(MicroBitEvent evt);
+    void                        onSystemEvent(MicroBitEvent evt);
 
     uint8_t                     status;
 
@@ -170,6 +170,16 @@ class MicroBit
       * @endcode
       */
     static ManagedString getSerial();
+
+    /**
+      * Return the model of the micro:bit
+      *
+      * @return A ManagedString representing the serial number of this device.
+      *
+      * @code
+      * ManagedString model = uBit.getModel();
+      */
+    ManagedString getModel();
 
     /**
       * Will reset the micro:bit when called.
